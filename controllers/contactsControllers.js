@@ -1,5 +1,3 @@
-import { error } from "console";
-import HttpError from "../helpers/HttpError.js";
 import {
   listContacts,
   getContactById,
@@ -11,7 +9,6 @@ import {
   createContactSchema,
   updateContactSchema,
 } from "../schemas/contactsSchemas.js";
-import validateBody from "../helpers/validateBody.js";
 
 export const getAllContacts = (req, res) => {
   listContacts().then((contacts) => res.status(200).json(contacts));
