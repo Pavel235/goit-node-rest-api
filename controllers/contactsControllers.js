@@ -15,9 +15,6 @@ const getOneContact = async (req, res, next) => {
 
   try {
     const resp = await Contact.findById(id);
-    if (!resp) {
-      throw HttpError(404, "Not Found");
-    }
     res.json(resp);
   } catch (error) {
     next(error);
@@ -29,9 +26,6 @@ const deleteContact = async (req, res, next) => {
 
   try {
     const resp = await Contact.findByIdAndDelete(id);
-    if (!resp) {
-      throw HttpError(404, "Not Found");
-    }
     res.json(resp);
   } catch (error) {
     next(error);
@@ -66,9 +60,6 @@ const updateContact = async (req, res, next) => {
 
   try {
     const resp = await Contact.findByIdAndUpdate(id, contact, { new: true });
-    if (!resp) {
-      throw HttpError(404, "Not Found");
-    }
 
     if (!req.body || Object.keys(req.body).length === 0) {
       throw HttpError(400, "Body must have at least one field");
@@ -90,9 +81,6 @@ const updateStatusContact = async (req, res, next) => {
       { favorite },
       { new: true }
     );
-    if (!resp) {
-      throw HttpError(404, "Not Found");
-    }
 
     res.json(resp);
   } catch (error) {
