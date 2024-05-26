@@ -4,6 +4,8 @@ import cors from "cors";
 import mongoose from "mongoose";
 import "dotenv/config";
 import contactsRouter from "./routes/contactsRouter.js";
+import { authMiddleware } from "./helpers/authmiddleware.js";
+import userRouter from "./routes/authRouter.js";
 
 const app = express();
 
@@ -11,7 +13,8 @@ app.use(morgan("tiny"));
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/contacts", contactsRouter);
+app.use("/api/users", userRouter);
+app.use("/api/contacts", authMiddleware, contactsRouter);
 
 app.use((_, res) => {
   res.status(404).json({ message: "Route not found" });
