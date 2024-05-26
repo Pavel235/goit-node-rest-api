@@ -18,10 +18,6 @@ app.use((_, res) => {
 });
 
 app.use((err, req, res, next) => {
-  if (err.name === "CastError") {
-    res.status(404).json({ message: "Not Found" });
-  }
-
   const status = err.status || 500;
   const message = err.message || "Internal Server Error";
   res.status(status).json({ message });
