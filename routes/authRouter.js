@@ -7,7 +7,7 @@ import {
 } from "../controllers/authControllers.js";
 import validateBody from "../helpers/validateBody.js";
 import { loginUserSchema, registerUserSchema } from "../schemas/authSchemas.js";
-import { authMiddleware } from "../helpers/authmiddleware.js";
+import { authMiddleware } from "../helpers/authMiddleware.js";
 
 const userRouter = express.Router();
 

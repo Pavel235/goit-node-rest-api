@@ -2,6 +2,7 @@ import HttpError from "../helpers/HttpError.js";
 import User from "../models/user.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import gravatar from "gravatar";
 
 export async function userRegistration(req, res, next) {
   const { email, password } = req.body;
@@ -12,7 +13,13 @@ export async function userRegistration(req, res, next) {
       throw HttpError(409, "Email in use");
     }
     const hashPassword = await bcrypt.hash(password, 10);
-    const newUser = await User.create({ email, password: hashPassword });
+    const generatedAvatar = gravatar.url(email);
+
+    const newUser = await User.create({
+      email,
+      password: hashPassword,
+      avatarURL: `http:${generatedAvatar}`,
+    });
 
     const { subscription } = newUser;
 
@@ -78,6 +85,7 @@ export async function userByToken(req, res, next) {
   const { id } = req.user;
   try {
     const currentUser = await User.findById(id);
+    console.log(currentUser);
 
     if (!currentUser) {
       throw HttpError(401);
