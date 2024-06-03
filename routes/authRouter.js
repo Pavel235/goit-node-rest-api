@@ -9,18 +9,18 @@ import validateBody from "../helpers/validateBody.js";
 import { loginUserSchema, registerUserSchema } from "../schemas/authSchemas.js";
 import { authMiddleware } from "../helpers/authMiddleware.js";
 
-const userRouter = express.Router();
+const authRouter = express.Router();
 
-userRouter.post(
+authRouter.post(
   "/register",
   validateBody(registerUserSchema),
   userRegistration
 );
 
-userRouter.post("/login", validateBody(loginUserSchema), userLogin);
+authRouter.post("/login", validateBody(loginUserSchema), userLogin);
 
-userRouter.post("/logout", authMiddleware, userLogout);
+authRouter.post("/logout", authMiddleware, userLogout);
 
-userRouter.get("/current", authMiddleware, userByToken);
+authRouter.get("/current", authMiddleware, userByToken);
 
-export default userRouter;
+export default authRouter;
