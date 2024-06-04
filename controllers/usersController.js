@@ -2,11 +2,12 @@ import * as fs from "node:fs/promises";
 import path from "node:path";
 import User from "../models/user.js";
 import jimp from "jimp";
+import HttpError from "../helpers/HttpError.js";
 
 export async function userAvatar(req, res, next) {
   try {
     if (!req.file) {
-      return res.status(400).send("Please select the avatar file");
+      throw HttpError(401, "Not authorized");
     }
 
     const userAvatar = await jimp.read(req.file.path);

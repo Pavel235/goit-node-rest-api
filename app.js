@@ -17,7 +17,7 @@ app.use(express.json());
 
 app.use("/avatars", express.static(path.resolve("./public/avatars")));
 
-app.use("/api/auth", authRouter);
+app.use("/users", authRouter);
 app.use("/api/contacts", authMiddleware, contactsRouter);
 app.use("/users", authMiddleware, userRouter);
 
