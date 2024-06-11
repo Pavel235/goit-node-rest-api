@@ -1,8 +1,11 @@
 import HttpError from "../helpers/HttpError.js";
 import User from "../models/user.js";
+import crypto from "node:crypto";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import gravatar from "gravatar";
+import mail from "../mail/mail.js";
+import "dotenv/config";
 
 export async function userRegistration(req, res, next) {
   const { email, password } = req.body;
@@ -14,14 +17,18 @@ export async function userRegistration(req, res, next) {
     }
     const hashPassword = await bcrypt.hash(password, 10);
     const generatedAvatar = gravatar.url(email);
+    const verificationToken = crypto.randomUUID();
 
     const newUser = await User.create({
       email,
       password: hashPassword,
       avatarURL: `http:${generatedAvatar}`,
+      verificationToken,
     });
 
     const { subscription } = newUser;
+
+    await mail.sendMail(email);
 
     res.status(201).json({
       user: {
@@ -48,6 +55,10 @@ export async function userLogin(req, res, next) {
 
     if (isMatch === false) {
       throw HttpError(401, "Email or password is incorrect");
+    }
+
+    if (user.verify === false) {
+      res.status(401).send({ message: "Please verify your email" });
     }
 
     const userInfo = {
